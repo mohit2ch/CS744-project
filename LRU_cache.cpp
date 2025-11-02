@@ -9,35 +9,10 @@
     }
 
     LRU_Cache::LRU_Cache(){
-        std::ifstream infile("lru_cache.txt");
-        if(!infile.good()){
-            int cap;
-            std::cout << "Cache file not found. Enter the size of Cache : ";
-            std::cin >> cap;
-
-            cacheInitialiser(cap);
-            std::ofstream outfile("lru_cache.txt");
-            if(!outfile) {
-                std::cerr << "Error creating cache file. Switching to session wide LRU cache\n";
-                return;
-            }
-
-            outfile << cap << std::endl;
-            outfile.close();
-        }
-        else {
-            int cap;
-            infile >> cap;
-            cacheInitialiser(cap);
-
-            int key;
-            std::string value;
-            while(infile >> key >> value){
-                create(key, value);
-            }
-            std::cout << "Cache loaded from file.\n";
-        }
-        infile.close();
+        int cap;
+        std::cout << "Enter the size of Cache : ";
+        std::cin >> cap;
+        cacheInitialiser(cap);
     }
 
     void LRU_Cache::updatePosition(int key){
@@ -51,15 +26,15 @@
         prev->next = mp[key];
     }
     
-    std::string LRU_Cache::get(int key){
-        if(mp.find(key)==mp.end()) return "-1";
-        std::string res = mp[key]->value;
+    bool LRU_Cache::get(int key, std::string& value){
+        if(mp.find(key)==mp.end()) return false;
+        value = mp[key]->value;
         updatePosition(key);
-        return res;
+        return true;
     }
     
-    int LRU_Cache::create(int key, std::string value){
-        if(mp.find(key)!=mp.end()) return -1;
+    bool LRU_Cache::create(int key, std::string value){
+        if(mp.find(key)!=mp.end()) return false;
         mp[key] = new ListNode(key);
         mp[key]->value = value;
         
@@ -73,23 +48,23 @@
             remove(head->next->key);
         }
 
-        return 1;
+        return true;
     }
     
-    int LRU_Cache::update(int key, std::string value){
-        if(mp.find(key)==mp.end()) return -1;
+    bool LRU_Cache::update(int key, std::string value){
+        if(mp.find(key)==mp.end()) return false;
         mp[key]->value = value;
         updatePosition(key);
-        return 1;
+        return true;
     }
     
-    int LRU_Cache::remove(int key){
-        if(mp.find(key)==mp.end()) return -1;
+    bool LRU_Cache::remove(int key){
+        if(mp.find(key)==mp.end()) return false;
         mp[key]->prev->next = mp[key]->next;
         mp[key]->next->prev = mp[key]->prev;
         delete mp[key];
         mp.erase(key);
-        return 1;
+        return true;
     }
 
     void LRU_Cache::printCache(){
@@ -102,12 +77,10 @@
     }
 
     LRU_Cache::~LRU_Cache() {
-        std::ofstream outfile("lru_cache.txt");
-        std::cout << "Storing Cache into persistent storage\n";
-        outfile << capacity << "\n";
+        
         ListNode* cur = head;
         while(cur){
-            if(cur!=head and cur!=tail and outfile) outfile << cur->key <<" "<<cur->value<<"\n";
+            // if(cur!=head and cur!=tail and outfile) outfile << cur->key <<" "<<cur->value<<"\n";
             ListNode *next = cur->next;
             delete cur;
             cur = next;

@@ -29,13 +29,13 @@ private:
 public:
     // Cache need not be persistent
     LRU_Cache();
-    std::string get(int key);
+    bool get(int key, std::string& value);
     
-    int create(int key, std::string value);
+    bool create(int key, std::string value);
 
-    int update(int key, std::string value);
+    bool update(int key, std::string value);
 
-    int remove(int key);
+    bool remove(int key);
 
     void printCache();
 
