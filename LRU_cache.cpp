@@ -8,14 +8,14 @@
         capacity = cap;
     }
 
-    LRU_Cache::LRU_Cache(){
-        int cap;
-        std::cout << "Enter the size of Cache : ";
-        std::cin >> cap;
+    LRU_Cache::LRU_Cache(int cap){
+        // std::cout << "Enter the size of Cache : ";
+        // std::cin >> cap;
         cacheInitialiser(cap);
     }
 
     void LRU_Cache::updatePosition(int key){
+        // std::lock_guard<std::mutex> lock(mutex_);
         mp[key]->prev->next = mp[key]->next;
         mp[key]->next->prev = mp[key]->prev;
         
@@ -27,6 +27,7 @@
     }
     
     bool LRU_Cache::get(int key, std::string& value){
+        std::lock_guard<std::mutex> lock(mutex_);
         if(mp.find(key)==mp.end()) return false;
         value = mp[key]->value;
         updatePosition(key);
@@ -34,6 +35,7 @@
     }
     
     bool LRU_Cache::create(int key, std::string value){
+        std::lock_guard<std::mutex> lock(mutex_);
         if(mp.find(key)!=mp.end()) return false;
         mp[key] = new ListNode(key);
         mp[key]->value = value;
@@ -52,6 +54,7 @@
     }
     
     bool LRU_Cache::update(int key, std::string value){
+        std::lock_guard<std::mutex> lock(mutex_);
         if(mp.find(key)==mp.end()) return false;
         mp[key]->value = value;
         updatePosition(key);
@@ -59,15 +62,25 @@
     }
     
     bool LRU_Cache::remove(int key){
+        std::lock_guard<std::mutex> lock(mutex_);
         if(mp.find(key)==mp.end()) return false;
-        mp[key]->prev->next = mp[key]->next;
-        mp[key]->next->prev = mp[key]->prev;
-        delete mp[key];
-        mp.erase(key);
+        removeUnsafe(key);
         return true;
     }
 
+    void LRU_Cache::removeUnsafe(int key) {
+    // Internal method - assumes lock is already held
+    if (mp.find(key) == mp.end()) return;
+    
+    ListNode* node = mp[key];
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    delete node;
+    mp.erase(key);
+    }
+
     void LRU_Cache::printCache(){
+        std::lock_guard<std::mutex> lock(mutex_);
         std::cout<<capacity<<std::endl;
         ListNode *cur = head->next;
         while(cur and cur!=tail){

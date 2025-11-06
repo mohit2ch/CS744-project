@@ -10,6 +10,7 @@ Database *db;
 
 void signalHandler(int){
     std::cout<<"Closing the server...\n";
+    delete db;
     server.stop();
 }
 
@@ -39,8 +40,8 @@ int main(int argc, char *argv[]){
         std::cout<<"Key : "<<key<<std::endl;
         std::cout<<"Value : "<<value<<std::endl;
         
-        if(cache.create(std::stoi(key), value)){
-            db->create_kvpair(std::stoi(key), value);
+        if(cache.create(std::stoi(key), value) && db->create_kvpair(std::stoi(key), value)){
+            
             res.set_content("kv pair added succesfully", "text/plain");
         }
         else 
@@ -57,8 +58,7 @@ int main(int argc, char *argv[]){
         std::cout<<"Key : "<<key<<std::endl;
         std::cout<<"Value : "<<value<<std::endl;
         
-        if(cache.update(std::stoi(key), value)){
-            db->update_kvpair(std::stoi(key), value);
+        if(cache.update(std::stoi(key), value) && db->update_kvpair(std::stoi(key), value)){
             res.set_content("key value updated", "text/plain");
         }
         else if(db->update_kvpair(std::stoi(key), value)){

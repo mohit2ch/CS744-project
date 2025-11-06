@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <mutex>
+
 struct ListNode
 {
     int key;
@@ -23,12 +26,14 @@ private:
     ListNode *head, *tail;
     std::unordered_map<int, ListNode*> mp;
     int capacity;
+    std::mutex mutex_;
 
     void updatePosition(int key);
     void cacheInitialiser(int cap);
+    void removeUnsafe(int key);
 public:
     // Cache need not be persistent
-    LRU_Cache();
+    LRU_Cache(int cap=100);
     bool get(int key, std::string& value);
     
     bool create(int key, std::string value);
