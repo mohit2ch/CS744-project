@@ -79,15 +79,15 @@
     mp.erase(key);
     }
 
-    void LRU_Cache::printCache(){
-        std::lock_guard<std::mutex> lock(mutex_);
-        std::cout<<capacity<<std::endl;
-        ListNode *cur = head->next;
-        while(cur and cur!=tail){
-            std::cout<<cur->key<<" "<<cur->value<<std::endl;
-            cur = cur->next;
-        }
-    }
+    // void LRU_Cache::printCache(){
+    //     std::lock_guard<std::mutex> lock(mutex_);
+    //     std::cout<<capacity<<std::endl;
+    //     ListNode *cur = head->next;
+    //     while(cur and cur!=tail){
+    //         std::cout<<cur->key<<" "<<cur->value<<std::endl;
+    //         cur = cur->next;
+    //     }
+    // }
 
     LRU_Cache::~LRU_Cache() {
         
