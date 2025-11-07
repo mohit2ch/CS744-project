@@ -42,7 +42,7 @@ public:
 
     bool remove(int key);
 
-    void printCache();
+    // void printCache();
 
     ~LRU_Cache();
 };
