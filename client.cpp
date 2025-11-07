@@ -27,11 +27,11 @@ void interactive_console(httplib::Client &client){
         if(command == "exit"){
             break;
         }
-        else if(command == "print"){
-            if(auto res = client.Get("/printcache")){
-                std::cout <<"Get Response: "<<res->body<<std::endl;
-            }
-        }
+        // else if(command == "print"){
+        //     if(auto res = client.Get("/printcache")){
+        //         std::cout <<"Get Response: "<<res->body<<std::endl;
+        //     }
+        // }
         else if(command == "delete"){
             
             params.emplace("key", key);
@@ -98,11 +98,11 @@ void file_console(httplib::Client &client, std::string& filename){
         if(command == "exit"){
             break;
         }
-        else if(command == "print"){
-            if(auto res = client.Get("/printcache")){
-                std::cout <<"Get Response: "<<res->body<<std::endl;
-            }
-        }
+        // else if(command == "print"){
+        //     if(auto res = client.Get("/printcache")){
+        //         std::cout <<"Get Response: "<<res->body<<std::endl;
+        //     }
+        // }
         else if(command == "delete"){
             
             params.emplace("key", key);
