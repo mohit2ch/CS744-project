@@ -106,11 +106,11 @@ int main(int argc, char *argv[]){
             res.set_content("Entry for key doesn't exist", "text/plain");
     });
 
-    server.Get("/printcache", [](const httplib::Request& req, httplib::Response& res){
-        cache.printCache();
+    // server.Get("/printcache", [](const httplib::Request& req, httplib::Response& res){
+    //     cache.printCache();
 
-        res.set_content("Cache printed", "text/plain"); 
-    });
+    //     res.set_content("Cache printed", "text/plain"); 
+    // });
 
     std::cout << "Server started on localhost: "<<argv[1]<<std::endl;
     server.listen("localhost", port);
