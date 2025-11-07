@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
     }
     
     std::signal(SIGINT, signalHandler);
-    std::string conn_string = "postgresql://postgres:12345@localhost:5432/postgres";
+    std::string conn_string = "postgresql:/<user>:<password>@<postgres port>";
     db = new Database(conn_string);
     
     int port = std::stoi(argv[1]);
