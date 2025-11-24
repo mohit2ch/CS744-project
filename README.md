@@ -9,8 +9,21 @@
 
 3. Configure PostgreSQL:
    - Create database and table.
-   - Update connection info inside source files if needed.
+   ```
+   CREATE DATABASE kvdb; 
+   
+   \c kvdb
+    
+    CREATE TABLE kv (
+        key   INTEGER PRIMARY KEY,
+        value TEXT
+    );
 
+   ```
+   - Update connection info inside `server.cpp` files if needed.
+```
+const std::string conninfo = "host=127.0.0.1 port=5432 dbname=kvdb user=youruser password=yourpass";
+```
 4. Run the server:
    ```./server 5000```
 
