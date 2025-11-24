@@ -1,9 +1,0 @@
-create 11 abc
-create 12 def
-create 13 ghi
-create 14 jkl
-update 11 mno
-update 15 opq
-read 11
-delete 12
-update 13 klj
